@@ -1,0 +1,147 @@
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+django.setup()
+
+from appname.models import Perfume
+
+perfumes_data = [
+    {
+        "brand": "Maison Francis Kurkdjian",
+        "title": "Baccarat Rouge 540",
+        "notes": "Шафран, Жасмин, Древесный янтарь, Серая амбра, Еловая смола",
+        "price": 38500,
+        "is_promo": True,
+        "promo_text": "ХИТ ПРОДАЖ 🔥",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Creed",
+        "title": "Aventus",
+        "notes": "Ананас, Бергамот, Чёрная смородина, Береза, Пачули, Мускус",
+        "price": 42000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": False,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Tom Ford",
+        "title": "Lost Cherry",
+        "notes": "Вишня, Горький миндаль, Ликер, Слива, Турецкая роза, Перуанский бальзам",
+        "price": 45000,
+        "is_promo": True,
+        "promo_text": "СКИДКА 10%",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": False,
+    },
+    {
+        "brand": "Tom Ford",
+        "title": "Tobacco Vanille",
+        "notes": "Лист табака, Специи, Ваниль, Какао, Бобы тонка, Древесные ноты",
+        "price": 41000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": False,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Byredo",
+        "title": "Gypsy Water",
+        "notes": "Можжевельник, Лимон, Бергамот, Иглы хвои, Ладан, Ваниль, Амбра",
+        "price": 29000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Byredo",
+        "title": "Bal d'Afrique",
+        "notes": "Бархатцы, Лимон, Бергамот, Фиалка, Цикламен, Ветивер, Серая амбра",
+        "price": 31000,
+        "is_promo": True,
+        "promo_text": "ТОП ВЫБОР ✨",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Le Labo",
+        "title": "Santal 33",
+        "notes": "Сандал, Кожа, Папирус, Кедр, Фиалка, Кардамон, Ирис, Амбра",
+        "price": 36000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": False,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Kilian",
+        "title": "Angels' Share",
+        "notes": "Коньяк, Корица, Бобы тонка, Дуб, Пралине, Ваниль, Сандал",
+        "price": 34000,
+        "is_promo": True,
+        "promo_text": "БЕСТСЕЛЛЕР 🥃",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": False,
+    },
+    {
+        "brand": "Parfums de Marly",
+        "title": "Delina",
+        "notes": "Ревень, Личи, Бергамот, Турецкая роза, Пион, Ваниль, Кашмеран",
+        "price": 33000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": False,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Diptyque",
+        "title": "Philosykos",
+        "notes": "Лист инжира, Инжир, Зеленые ноты, Кокос, Древесный аккорд, Кедр",
+        "price": 24000,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Jo Malone",
+        "title": "Wood Sage & Sea Salt",
+        "notes": "Морская соль, Шалфей, Грейпфрут, Амбретта, Морские водоросли",
+        "price": 19500,
+        "is_promo": True,
+        "promo_text": "АКЦИЯ 🏷️",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": True,
+        "in_stock_almaty": True,
+    },
+    {
+        "brand": "Xerjoff",
+        "title": "Erba Pura",
+        "notes": "Сицилийский апельсин, Калабрийский бергамот, Фруктовые ноты, Белый мускус, Ваниль",
+        "price": 27500,
+        "is_promo": False,
+        "promo_text": "",
+        "in_stock_bishkek_center": True,
+        "in_stock_bishkek_asia": False,
+        "in_stock_almaty": True,
+    }
+]
+
+for item in perfumes_data:
+    Perfume.objects.create(**item)
+
+print("Успешно добавлено 12 парфюмов!")

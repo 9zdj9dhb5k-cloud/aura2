@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход — AURA</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0f0f11; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-box { background: #18181c; border: 1px solid #2a2a30; padding: 40px; border-radius: 12px; width: 320px; }
+        h2 { color: #d4af37; margin-top: 0; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #333; background: #0f0f11; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #d4af37; border: none; color: #000; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 15px; }
+        a { color: #888; font-size: 13px; text-decoration: none; display: block; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Вход в AURA</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+        <a href="/register/">Нет аккаунта? Зарегистрироваться</a>
+    </div>
+</body>
+</html>

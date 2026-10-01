@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Избранное — AURA Haute Parfumerie</title>
+    <!-- Минималистичные векторные иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --card-bg: #121215;
+            --accent-gold: #d4af37;
+            --accent-gold-hover: #f3e5ab;
+            --text-main: #f0f0f2;
+            --text-muted: #8e8e93;
+            --border-color: #222228;
+            --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background: var(--bg-dark); color: var(--text-main); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Top Bar */
+        .top-bar { background: #141418; border-bottom: 1px solid var(--border-color); font-size: 12px; padding: 10px 50px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .top-info { color: var(--text-muted); }
+
+        /* Navigation */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 50px; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 22px; font-weight: 700; letter-spacing: 4px; color: var(--text-main); text-decoration: none; text-transform: uppercase; }
+        .logo span { color: var(--accent-gold); }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-link-icon { color: var(--text-main); text-decoration: none; font-size: 18px; position: relative; transition: color 0.2s; }
+        .nav-link-icon:hover, .nav-link-icon.active { color: var(--accent-gold); }
+        .btn-auth { border: 1px solid var(--border-color); padding: 8px 18px; border-radius: 20px; font-size: 13px; color: var(--text-main); text-decoration: none; transition: all 0.3s; }
+        .btn-auth:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        /* Header Section */
+        .page-header { text-align: center; padding: 50px 20px 30px; }
+        .page-header h1 { font-size: 36px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: #fff; margin-bottom: 10px; }
+        .page-header p { color: var(--text-muted); font-size: 14px; letter-spacing: 1px; }
+
+        /* Main Container */
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto 80px; padding: 0 20px; }
+        
+        /* Favorites Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; position: relative; transition: border-color 0.3s, transform 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { border-color: #33333d; transform: translateY(-5px); }
+        .card-img-wrap { width: 100%; height: 240px; border-radius: 10px; overflow: hidden; margin-bottom: 15px; background: #000; position: relative; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: scale 0.5s; }
+        .card:hover .card-img { scale: 1.05; opacity: 1; }
+        .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-gold); font-weight: 600; }
+        .title { font-size: 18px; font-weight: 500; margin: 6px 0 10px; color: #fff; }
+        .notes { font-size: 12px; color: var(--text-muted); line-height: 1.4; height: 34px; overflow: hidden; margin-bottom: 15px; }
+        
+        .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: auto; }
+        .price { font-size: 20px; font-weight: 600; }
+        .actions { display: flex; gap: 10px; }
+        .btn-buy { background: var(--text-main); color: #000; border: none; padding: 10px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+        .btn-buy:hover { background: var(--accent-gold); }
+        .btn-remove { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: #ff4d4d; background: rgba(255,77,77,0.1); text-decoration: none; transition: all 0.2s; }
+        .btn-remove:hover { background: #ff4d4d; color: #fff; }
+
+        /* Empty State */
+        .empty-box { text-align: center; padding: 90px 20px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; max-width: 600px; margin: 40px auto; }
+        .empty-icon { font-size: 48px; color: var(--text-muted); margin-bottom: 20px; opacity: 0.5; }
+        .empty-title { font-size: 22px; font-weight: 300; margin-bottom: 10px; color: #fff; }
+        .empty-text { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        .btn-catalog { display: inline-block; background: var(--accent-gold); color: #000; font-weight: 600; padding: 14px 32px; border-radius: 25px; text-decoration: none; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s; }
+        .btn-catalog:hover { background: var(--accent-gold-hover); }
+
+        /* Footer */
+        footer { background: #070709; border-top: 1px solid var(--border-color); padding: 60px 50px 30px; font-size: 13px; color: var(--text-muted); }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand h3 { font-size: 20px; letter-spacing: 3px; color: #fff; margin-bottom: 15px; }
+        .footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #fff; margin-bottom: 20px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-col ul li a:hover { color: var(--accent-gold); }
+        .gis-card { background: #121216; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+        .gis-card h5 { color: #fff; font-size: 13px; margin-bottom: 4px; }
+        .gis-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: var(--accent-gold); text-decoration: none; font-weight: 600; border: 1px solid var(--accent-gold); padding: 4px 10px; border-radius: 12px; }
+        .gis-btn:hover { background: var(--accent-gold); color: #000; }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div>
+            <a href="/" style="color: var(--text-muted); text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+        </div>
+        <div class="top-info">
+            <i class="fa-solid fa-truck-fast"></i> Бесплатная курьерская доставка при заказе от 30 000 ₽
+        </div>
+    </div>
+
+    <nav>
+        <a href="/" class="logo">AURA<span>.</span></a>
+        <div class="nav-actions">
+            <a href="/favorites/" class="nav-link-icon active" title="Избранное">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+            <a href="/cart/" class="nav-link-icon" title="Корзина">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </a>
+            {% if user.is_authenticated %}
+                <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-regular fa-user"></i> {{ user.username }}</span>
+                <a href="/logout/" class="btn-auth">Выйти</a>
+            {% else %}
+                <a href="/login/" class="btn-auth">Войти</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Ваша Коллекция</h1>
+        <p>Сохраненные ароматы высокой парфюмерии</p>
+    </div>
+
+    <main>
+        {% if perfumes %}
+            <div class="grid">
+                {% for item in perfumes %}
+                    <div class="card">
+                        <div class="card-img-wrap">
+                            <img src="{% if 'http' in item.image.name %}{{ item.image.name }}{% else %}{{ item.image.url }}{% endif %}" alt="{{ item.title }}" class="card-img">
+                        </div>
+
+                        <div>
+                            <span class="brand">{{ item.brand }}</span>
+                            <h3 class="title">{{ item.title }}</h3>
+                            <p class="notes">{{ item.notes }}</p>
+                        </div>
+
+                        <div class="price-row">
+                            <span class="price">{{ item.price }} ₽</span>
+                            <div class="actions">
+                                <a href="/toggle-favorite/{{ item.id }}/" class="btn-remove" title="Удалить из избранного">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                                <a href="/add-to-cart/{{ item.id }}/" class="btn-buy">В корзину</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-box">
+                <div class="empty-icon">
+                    <i class="fa-regular fa-bookmark"></i>
+                </div>
+                <h2 class="empty-title">Список избранного пуст</h2>
+                <p class="empty-text">Отмечайте понравившиеся композиции значком сердца, чтобы вернуться к ним в любой момент.</p>
+                <a href="/" class="btn-catalog">Перейти в каталог</a>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>AURA PARFUM</h3>
+                <p>Сеть бутиков селективной парфюмерии в Бишкеке и Алматы.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="/">Каталог</a></li>
+                    <li><a href="/cart/">Корзина</a></li>
+                    <li><a href="/favorites/">Избранное</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Сервис</h4>
+                <ul>
+                    <li><a href="#">Гарантия подлинности</a></li>
+                    <li><a href="#">Доставка и оплата</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4> Бутики на 2ГИС</h4>
+                <div class="gis-card">
+                    <h5>Бишкек, ЦУМ «Айчюрек»</h5>
+                    <a href="https://2gis.kg/bishkek/firm/70000001039842673" target="_blank" class="gis-btn">
+                        <i class="fa-solid fa-map-pin"></i> 2ГИС
+                    </a>
+                </div>
+                <div class="gis-card">
+                    <h5>Бишкек, Asia Mall</h5>
+                    <a href="https://2gis.kg/bishkek/firm/70000001024602465" target="_blank" class="gis-btn">
+                        <i class="fa-solid fa-map-pin"></i> 2ГИС
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 AURA HAUTE PARFUMERIE. Все права защищены.
+        </div>
+    </footer>
+
+</body>
+</html>

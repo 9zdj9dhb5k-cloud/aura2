@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина — AURA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0c; color: #fff; padding: 40px 20px; }
+        .cart-container { max-width: 800px; margin: 0 auto; background: #121215; border: 1px solid #222228; border-radius: 16px; padding: 30px; }
+        h1 { font-size: 28px; font-weight: 300; letter-spacing: 2px; margin-bottom: 25px; color: #d4af37; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222228; padding: 15px 0; }
+        .item-info h3 { font-size: 16px; margin-bottom: 5px; }
+        .item-info p { color: #8e8e93; font-size: 13px; }
+        .total-box { margin-top: 25px; text-align: right; font-size: 20px; font-weight: 600; }
+        
+        /* Modal Payment Form */
+        .pay-card { margin-top: 30px; background: #18181f; border: 1px solid #33333f; padding: 25px; border-radius: 12px; }
+        .pay-card h3 { font-size: 16px; margin-bottom: 15px; color: #d4af37; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; color: #8e8e93; margin-bottom: 5px; }
+        .card-input { width: 100%; padding: 12px 15px; background: #0a0a0c; border: 1px solid #222228; border-radius: 8px; color: #fff; font-size: 16px; letter-spacing: 2px; outline: none; box-sizing: border-box; }
+        .card-input:focus { border-color: #d4af37; }
+        .btn-pay { width: 100%; background: #d4af37; color: #000; font-weight: bold; border: none; padding: 14px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .btn-pay:hover { background: #f3e5ab; }
+        .btn-back { display: inline-block; color: #8e8e93; text-decoration: none; margin-bottom: 20px; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <a href="/" class="btn-back"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+        <h1>Ваша корзина</h1>
+
+        {% if cart_items %}
+            {% for item in cart_items %}
+            <div class="cart-item">
+                <div class="item-info">
+                    <h3>{{ item.perfume.brand }} — {{ item.perfume.title }}</h3>
+                    <p>Количество: {{ item.quantity }}</p>
+                </div>
+                <div>{{ item.perfume.price }} ₽</div>
+            </div>
+            {% endfor %}
+
+            <div class="total-box">
+                Итого к оплате: <span>{{ total_price }} ₽</span>
+            </div>
+
+            <!-- Симуляция оплаты картой -->
+            <div class="pay-card">
+                <h3><i class="fa-regular fa-credit-card"></i> Оплата банковской картой</h3>
+                <form id="payment-form" onsubmit="handlePayment(event)">
+                    <div class="form-group">
+                        <label for="card-number">Номер карты (16 цифр)</label>
+                        <input type="text" id="card-number" class="card-input" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                    </div>
+                    <button type="submit" class="btn-pay">Оплатить заказ</button>
+                </form>
+            </div>
+        {% else %}
+            <p style="color: #8e8e93;">Ваша корзина пока пуста.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Автоматическое форматирование ввода номера карты (пробелы каждые 4 цифры)
+        document.getElementById('card-number')?.addEventListener('input', function (e) {
+            let val = e.target.value.replace(/\D/g, '');
+            val = val.substring(0, 16);
+            let formatted = val.match(/.{1,4}/g)?.join(' ') || '';
+            e.target.value = formatted;
+        });
+
+        function handlePayment(e) {
+            e.preventDefault();
+            const cardNum = document.getElementById('card-number').value.replace(/\s/g, '');
+            if (cardNum.length < 16) {
+                alert('Пожалуйста, введите полный 16-значный номер карты.');
+                return;
+            }
+            alert('✨ Оплата успешно проведена! Ваш заказ принят в обработку. Спасибо за покупку в AURA!');
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

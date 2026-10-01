@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA — Haute Parfumerie</title>
+    <!-- Минималистичные векторные иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --card-bg: #121215;
+            --accent-gold: #d4af37;
+            --accent-gold-hover: #f3e5ab;
+            --text-main: #f0f0f2;
+            --text-muted: #8e8e93;
+            --border-color: #222228;
+            --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background: var(--bg-dark); color: var(--text-main); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+        /* Top Bar */
+        .top-bar { background: #141418; border-bottom: 1px solid var(--border-color); font-size: 12px; padding: 10px 50px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .store-selector { display: flex; gap: 15px; align-items: center; }
+        .store-selector a { color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 20px; transition: all 0.3s ease; border: 1px solid transparent; }
+        .store-selector a.active { color: #000; background: var(--accent-gold); font-weight: 600; }
+        .top-info { color: var(--text-muted); }
+
+        /* Navigation */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 50px; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 22px; font-weight: 700; letter-spacing: 4px; color: var(--text-main); text-decoration: none; text-transform: uppercase; }
+        .logo span { color: var(--accent-gold); }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-link-icon { color: var(--text-main); text-decoration: none; font-size: 18px; position: relative; transition: color 0.2s; }
+        .nav-link-icon:hover { color: var(--accent-gold); }
+        
+        .user-profile-link { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-main); padding: 4px 12px; border-radius: 20px; border: 1px solid transparent; transition: all 0.3s; }
+        .user-profile-link:hover { border-color: var(--border-color); background: #141418; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+        .user-avatar-placeholder { width: 32px; height: 32px; border-radius: 50%; background: #1c1c24; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
+        
+        .btn-auth { border: 1px solid var(--border-color); padding: 8px 18px; border-radius: 20px; font-size: 13px; color: var(--text-main); text-decoration: none; transition: all 0.3s; }
+        .btn-auth:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        /* Hero Banner (Apple Style) */
+        .hero { position: relative; height: 85vh; min-height: 550px; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #1c1c24 0%, #0a0a0c 100%); overflow: hidden; border-bottom: 1px solid var(--border-color); }
+        .hero-bg-img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: brightness(0.7); }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; padding: 0 20px; }
+        .hero-subtitle { font-size: 13px; text-transform: uppercase; letter-spacing: 5px; color: var(--accent-gold); margin-bottom: 15px; font-weight: 600; }
+        .hero-title { font-size: 56px; font-weight: 300; letter-spacing: -1px; margin-bottom: 20px; line-height: 1.1; color: #fff; }
+        .hero-desc { font-size: 18px; color: var(--text-muted); margin-bottom: 35px; font-weight: 300; }
+        .hero-btn { display: inline-block; background: var(--accent-gold); color: #000; font-weight: 600; padding: 16px 36px; border-radius: 30px; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; font-size: 12px; transition: transform 0.3s, background 0.3s; }
+        .hero-btn:hover { background: var(--accent-gold-hover); transform: translateY(-2px); }
+
+        /* Carousel Section */
+        .section-title { text-align: center; font-size: 28px; font-weight: 300; letter-spacing: 2px; margin: 60px 0 30px; text-transform: uppercase; }
+        .swiper { width: 90%; max-width: 1100px; height: 380px; border-radius: 16px; border: 1px solid var(--border-color); }
+        .swiper-slide { background: var(--card-bg); display: flex; align-items: center; padding: 40px; }
+        .slide-flex { display: flex; width: 100%; gap: 40px; align-items: center; }
+        .slide-img { width: 220px; height: 280px; object-fit: cover; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .slide-info { flex: 1; text-align: left; }
+        .slide-brand { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: var(--accent-gold); }
+        .slide-title { font-size: 32px; font-weight: 400; margin: 10px 0; }
+        .slide-price { font-size: 24px; font-weight: 600; color: #fff; margin-top: 15px; }
+
+        /* Catalog Grid */
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; position: relative; transition: border-color 0.3s, transform 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { border-color: #33333d; transform: translateY(-5px); }
+        .card-img-wrap { width: 100%; height: 240px; border-radius: 10px; overflow: hidden; margin-bottom: 15px; background: #000; position: relative; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: scale 0.5s; }
+        .card:hover .card-img { scale: 1.05; opacity: 1; }
+        .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-gold); font-weight: 600; }
+        .title { font-size: 18px; font-weight: 500; margin: 6px 0 10px; color: #fff; }
+        .notes { font-size: 12px; color: var(--text-muted); line-height: 1.4; height: 34px; overflow: hidden; margin-bottom: 15px; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: auto; }
+        .price { font-size: 20px; font-weight: 600; }
+        .actions { display: flex; gap: 10px; }
+        .btn-buy { background: var(--text-main); color: #000; border: none; padding: 10px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+        .btn-buy:hover { background: var(--accent-gold); }
+        .btn-fav { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; transition: all 0.2s; }
+        .btn-fav:hover, .btn-fav.active { color: #ff4d4d; border-color: #ff4d4d; background: rgba(255,77,77,0.1); }
+        .promo-badge { position: absolute; top: 30px; left: 30px; z-index: 2; background: rgba(212,175,55,0.9); backdrop-filter: blur(5px); color: #000; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Footer */
+        footer { background: #070709; border-top: 1px solid var(--border-color); padding: 70px 50px 30px; font-size: 13px; color: var(--text-muted); }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 50px; }
+        .footer-brand h3 { font-size: 20px; letter-spacing: 3px; color: #fff; margin-bottom: 15px; }
+        .footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #fff; margin-bottom: 20px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-col ul li a:hover { color: var(--accent-gold); }
+        
+        .gis-card { background: #121216; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+        .gis-card h5 { color: #fff; font-size: 14px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .gis-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; color: var(--accent-gold); text-decoration: none; font-weight: 600; border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 15px; transition: all 0.2s; }
+        .gis-btn:hover { background: var(--accent-gold); color: #000; }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 25px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="store-selector">
+            <span><i class="fa-solid fa-location-dot"></i> Выберите бутик:</span>
+            <a href="?store=bishkek_center" class="{% if current_store == 'bishkek_center' %}active{% endif %}">Бишкек (ЦУМ)</a>
+            <a href="?store=bishkek_asia" class="{% if current_store == 'bishkek_asia' %}active{% endif %}">Бишкек (Asia Mall)</a>
+            <a href="?store=almaty" class="{% if current_store == 'almaty' %}active{% endif %}">Алматы (Dostyk Plaza)</a>
+        </div>
+        <div class="top-info">
+            <i class="fa-solid fa-truck-fast"></i> Экспресс-доставка за 2 часа
+        </div>
+    </div>
+
+    <nav>
+        <a href="/" class="logo">AURA<span>.</span></a>
+        <div class="nav-actions">
+            <a href="/favorites/" class="nav-link-icon" title="Избранное">
+                <i class="fa-regular fa-heart"></i>
+            </a>
+            <a href="/cart/" class="nav-link-icon" title="Корзина">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </a>
+            {% if user.is_authenticated %}
+                <a href="/profile/" class="user-profile-link">
+                    {% if profile and profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" class="user-avatar" alt="Avatar">
+                    {% else %}
+                        <div class="user-avatar-placeholder">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                    {% endif %}
+                    <span style="font-size: 13px;">{{ user.username }}</span>
+                </a>
+                <a href="/logout/" class="btn-auth">Выйти</a>
+            {% else %}
+                <a href="/login/" class="btn-auth">Войти</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Apple-style Hero Section -->
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1600&auto=format&fit=crop" class="hero-bg-img" alt="Aura Parfumerie">
+        <div class="hero-content">
+            <div class="hero-subtitle">Селективная коллекция</div>
+            <h1 class="hero-title">Искусство чистого аромата</h1>
+            <p class="hero-desc">Откройте для себя редкие нишевые композиции Louis Vuitton, Clive Christian и Creed с официальной гарантией подлинности.</p>
+            <a href="#catalog" class="hero-btn">Исследовать каталог</a>
+        </div>
+    </section>
+
+    {% if perfumes %}
+    <h2 class="section-title">Избранные релизы</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in perfumes %}
+            <div class="swiper-slide">
+                <div class="slide-flex">
+                    <img src="{% if 'http' in item.image.name %}{{ item.image.name }}{% else %}{{ item.image.url }}{% endif %}" class="slide-img">
+                    <div class="slide-info">
+                        <span class="slide-brand">{{ item.brand }}</span>
+                        <h3 class="slide-title">{{ item.title }}</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;">{{ item.notes }}</p>
+                        <div class="slide-price">{{ item.price }} ₽</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <h2 class="section-title" id="catalog">Коллекция парфюмерии</h2>
+    <div class="container">
+        {% for item in perfumes %}
+            <div class="card">
+                {% if item.is_promo %}
+                    <div class="promo-badge">{{ item.promo_text|default:"АКЦИЯ" }}</div>
+                {% endif %}
+
+                <div class="card-img-wrap">
+                    <img src="{% if 'http' in item.image.name %}{{ item.image.name }}{% else %}{{ item.image.url }}{% endif %}" alt="{{ item.title }}" class="card-img">
+                </div>
+
+                <div>
+                    <span class="brand">{{ item.brand }}</span>
+                    <h3 class="title">{{ item.title }}</h3>
+                    <p class="notes">{{ item.notes }}</p>
+                </div>
+
+                <div class="price-row">
+                    <span class="price">{{ item.price }} ₽</span>
+                    <div class="actions">
+                        <a href="/toggle-favorite/{{ item.id }}/" class="btn-fav {% if item.id in user_favorites %}active{% endif %}">
+                            <i class="fa-{% if item.id in user_favorites %}solid{% else %}regular{% endif %} fa-heart"></i>
+                        </a>
+                        <a href="/add-to-cart/{{ item.id }}/" class="btn-buy">В корзину</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted); padding: 40px;">В выбранном бутике пока нет ароматов в наличии.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Подвал с прямыми рабочими ссылками на объекты 2ГИС -->
+    <footer id="boutiques">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>AURA PARFUM</h3>
+                <p>Сеть бутиков селективной парфюмерии в Бишкеке и Алматы. Напрямую от парфюмерных домов Европы.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="#catalog">Каталог</a></li>
+                    <li><a href="/cart/">Корзина</a></li>
+                    <li><a href="/favorites/">Избранное</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Сервис</h4>
+                <ul>
+                    <li><a href="#">Гарантия подлинности</a></li>
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4><i class="fa-solid fa-store"></i> Бутики на 2ГИС</h4>
+                
+                <!-- Бишкек: ЦУМ Айчурек -->
+                <div class="gis-card">
+                    <h5>Бишкек, ЦУМ «Айчюрек»</h5>
+                    <p style="font-size:11px;">пр. Чуй, 155 (1 этаж)</p>
+                    <a href="https://2gis.kg/bishkek/firm/70000001039842673" target="_blank" class="gis-btn">
+                        <i class="fa-solid fa-map-pin"></i> Открыть в 2ГИС
+                    </a>
+                </div>
+
+                <!-- Бишкек: Asia Mall -->
+                <div class="gis-card">
+                    <h5>Бишкек, Asia Mall</h5>
+                    <p style="font-size:11px;">пр. Чингиза Айтматова, 3</p>
+                    <a href="https://2gis.kg/bishkek/firm/70000001024602465" target="_blank" class="gis-btn">
+                        <i class="fa-solid fa-map-pin"></i> Открыть в 2ГИС
+                    </a>
+                </div>
+
+                <!-- Алматы: Dostyk Plaza -->
+                <div class="gis-card">
+                    <h5>Алматы, Dostyk Plaza</h5>
+                    <p style="font-size:11px;">мкр. Самал-2, 111</p>
+                    <a href="https://2gis.kz/almaty/firm/9429940001617972" target="_blank" class="gis-btn">
+                        <i class="fa-solid fa-map-pin"></i> Открыть в 2ГИС
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 AURA HAUTE PARFUMERIE. Все права защищены.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: { delay: 4000 },
+        });
+    </script>
+</body>
+</html>
